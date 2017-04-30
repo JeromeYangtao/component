@@ -27,6 +27,7 @@ window.slides = function(element) {
     })
 
     function goToSlide(index) {
+        let width = $element.width()
         if (index < 0) {
             index = count - 1
         } else if (index >= count) {
