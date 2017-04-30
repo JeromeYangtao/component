@@ -10,4 +10,14 @@
              .siblings()
              .removeClass('active')
      })
+
+     // 初始化
+     function init() {
+         $panes.children()
+             .eq(0)
+             .addClass('active')
+             .siblings()
+             .removeClass('active')
+     }
+     init()
  }
