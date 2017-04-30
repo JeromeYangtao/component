@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="" href="style.css">
+    <title>dialog</title>
+</head>
+
+<body>
+
+    <button id=xxx>点我</button>
+
+    <div id="outputDiv"></div>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="dialog.js"></script>
+    <script>
+        // 使用
+        xxx.onclick = function() {
+            var api = dialog({
+                title: '标题',
+                content: '这是一个对话框',
+                buttons: [{
+                    text: '确定',
+                    action: function() {
+                        outputDiv.textContent = '点击了确定'
+                        return false
+                    }
+                }, {
+                    text: '取消'
+                }]
+            })
+        }
+    </script>
+</body>
+
+</html>

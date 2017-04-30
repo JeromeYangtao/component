@@ -1,0 +1,36 @@
+body{
+  padding: 100px 40px;
+}
+.popover{
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  position: absolute;
+  display: inline-block;
+  background: white;
+  padding: .2em 1em ;
+  
+  &::before{
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-top-color: #ddd;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+  }
+  &::after{
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 4px solid transparent;
+    border-top-color: white;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
