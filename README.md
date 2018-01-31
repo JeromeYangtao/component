@@ -3,6 +3,7 @@
 - [x] popover组件
 - [x] Tabs组件
 - [x] 轮播组件
+- [x] localStorage 实现LRU缓存淘汰算法
 
 ### 效果预览
 [dialog组件](https://jeromeyangtao.github.io/component/dialog%E7%BB%84%E4%BB%B6/)
