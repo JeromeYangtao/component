@@ -1,6 +1,6 @@
 declare var $: (string) => any
 
-let slides = function(element: string) {
+slides = function(element: string): void {
   let $element: any = $(element)
   let $view: any = $element.children('.view')
   let width: number = $element.width()
@@ -85,7 +85,7 @@ let slides = function(element: string) {
       .removeClass('active')
   }
 
-  function autoPlay() {
+  function autoPlay(): void {
     timer = setInterval(function() {
       goToSlide(currentIndex + 1)
     }, time)
