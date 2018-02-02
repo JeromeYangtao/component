@@ -1,18 +1,29 @@
 .dialog {
-    width: 100px;
-    height: 100px;
-    background: white;
+  width: 120px;
+  height: 120px;
+  background: white;
+  position: relative;
 }
-
+.dialog .dialog-buttons {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+}
+.dialog .dialog-buttons button {
+  margin: 8px 0;
+}
 .dialog-wrapper {
-    position: fixed;
-    z-index: 10;
-    left: 0;
-    top: 0;
-    height: 100vh;
-    width: 100vw;
-    background: hsla(0, 0%, 0%, 0.2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  background: hsla(0, 0%, 0%, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
