@@ -44,7 +44,8 @@ popover组件
 
 Tabs组件
 ```js
-tabs(document.querySelectorAll('.tabs')[0])
+    new tabs(document.querySelectorAll('.tabs')[0])
+    new tabs(document.querySelectorAll('.tabs')[1])
 ```
 
 轮播组件
