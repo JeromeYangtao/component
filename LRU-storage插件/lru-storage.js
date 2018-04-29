@@ -13,11 +13,6 @@
 
 let num = 0 //localStorage中的对象数
 
-function LRU () {
-
-}
-
-let memQueue = []
 Array.prototype.remove = function (val) {
   var index = this.indexOf(val)
   if (index > -1) {
@@ -29,52 +24,62 @@ Array.prototype.remove = function (val) {
  * @param prefix  前缀
  * @param config  配置项，缓存过期时间maxAge，最大使用数limit
  */
-function lruStorage (prefix, config) {
-  if (window.localStorage) {
-    let localStorage = window.localStorage
-  } else {
-    throw Error('环境不支持localStorage')
+class lruStorage {
+  constructor (prefix, config) {
+    this.memQueue = []
+    this.prefix = prefix
+    if (config) {
+      this.config = {
+        maxAge: config.maxAge ? config.maxAge : 1000 * 60 * 60 * 24, //一天
+        limit: config.limit ? config.limit : 100
+      }
+    } else {
+      this.config = {
+        maxAge: 1000 * 60 * 60 * 24, //一天
+        limit: 100
+      }
+    }
+
+    if (window.localStorage) {
+      this.localStorage = window.localStorage
+    } else {
+      throw Error('环境不支持localStorage')
+    }
   }
 
-  prefix = prefix
-  config = config ? config : {
-    maxAge: 1000 * 60 * 60 * 24, //一天
-    limit: 100
+  set (key, value) {
+    key = this.prefix + '-' + key
+    let cache_value = {
+      value,
+      _time: Date.now()
+    }
+    cache_value = JSON.stringify(cache_value)
+    if (num < this.config.limit) {
+      this.localStorage.setItem(key, cache_value)
+      num++
+      this.memQueue.unshift(key)
+    } else {
+      this.localStorage.setItem(key, cache_value)
+      this.memQueue.unshift(key)
+
+      let lruObj = this.memQueue.pop()
+      this.localStorage.removeItem(lruObj)
+    }
   }
 
-  return {
-    set: function (key, value) {
-      key = prefix + '-' + key
-      if (num < config.limit) {
-        value._time = Date.now()
-        JSON.stringify(value)
-        localStorage.setItem(key, value)
-        num++
-        memQueue.unshift(key)
-      } else {
-        localStorage.setItem(key, value)
-        memQueue.unshift(key)
-
-        let lruObj = memQueue.pop()
-        localStorage.removeItem(lruObj)
-      }
-    },
-    get: function (key) {
-      key = prefix + '-' + key
-      let now = Date.now()
-      let value = localStorage.getItem(key)
-      value = JSON.parse(value)
-
-      if (!value || now - value._time > config.maxAge) {
-        localStorage.removeItem(key)
-        num--
-        memQueue.remove(key)
-        return undefined
-      } else {
-        memQueue.remove(key)
-        memQueue.unshift(key)
-        return value
-      }
+  get (key) {
+    key = this.prefix + '-' + key
+    let now = Date.now()
+    let cache_value = JSON.parse(this.localStorage.getItem(key))
+    if (!cache_value || now - cache_value._time > this.config.maxAge) {
+      this.localStorage.removeItem(key)
+      num--
+      this.memQueue.remove(key)
+      return undefined
+    } else {
+      this.memQueue.remove(key)
+      this.memQueue.unshift(key)
+      return cache_value.value
     }
   }
 }

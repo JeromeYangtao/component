@@ -11,24 +11,41 @@
 <script src="lru-storage.js"></script>
 <script>
     // 用户使用
-    lru = lruStorage('test') //data will be storaged as 'test-xxx' in localStorage
-    lru.set('foo', 1)
-    lru.get('foo')  //1
-    lru.get('bar')  //undefined
 
-    lru = lruStorage('testStale', {maxAge: 6 * 1000})
-    lru.set('a', 1)
-    lru.get('a')    //null
+    function test1 () {
+        let lru = new lruStorage('test') //data will be storaged as 'test-xxx' in localStorage
+        lru.set('foo', 1)
+        console.log(lru.get('foo'))   //1
+        console.log(lru.get('bar'))  //undefined
+    }
 
-    lru = lruStorage('testLimit', {limit: 2})
-    lru.set('a', 1)
-    lru.set('b', 2)
-    lru.get('a')
-    lru.set('c', 3)
+    async function test2 () {
+        let lru = new lruStorage('testStale', {maxAge: 1 * 1000})
+        lru.set('a', 1)
+        await  setTimeout(() => {
+            console.log(lru.get('a'))     //undefined
+        }, 1 * 2000)
+    }
 
-    lru.get('c')    //3
-    lru.get('b')    //undefined
-    lru.get('a')    //1
+    function test3 () {
+        let lru = new lruStorage('testLimit', {limit: 2})
+        lru.set('a', 1)
+        lru.set('b', 2)
+        console.log(lru.get('a'))  //1
+        lru.set('c', 3)
+
+        console.log(lru.get('c'))       //3
+        console.log(lru.get('b'))       //undefined
+        console.log(lru.get('a'))        //1
+    }
+
+    !(async () => {
+        test1()
+        await test2()
+        test3()
+    })()
+
+
 </script>
 </body>
 </html>
