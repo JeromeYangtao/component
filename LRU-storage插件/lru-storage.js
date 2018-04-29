@@ -39,7 +39,6 @@ class lruStorage {
         limit: 100
       }
     }
-
     if (window.localStorage) {
       this.localStorage = window.localStorage
     } else {
@@ -87,3 +86,4 @@ class lruStorage {
 // export default {
 //   lruStorage
 // }
+

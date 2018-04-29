@@ -1,23 +1,24 @@
- window.tabs = function(element) {
-     let $element = $(element)
-     let $nav = $($element.children('ol')[0])
-     let $panes = $($element.children('ol')[1])
-     $nav.on('click', function(e) {
-         let index = $(e.target).index()
-         $panes.children()
-             .eq(index)
-             .addClass('active')
-             .siblings()
-             .removeClass('active')
-     })
+class tabs {
+  constructor (element) {
+    this.$element = $(element)
+    this.$nav = $(this.$element.children('ol')[0])
+    this.$panes = $(this.$element.children('ol')[1])
+    this.$nav.on('click', e => {
+      let index = $(e.target).index()
+      this.$panes.children()
+        .eq(index)
+        .addClass('active')
+        .siblings()
+        .removeClass('active')
+    })
+    this.init()
+  }
 
-     // 初始化
-     function init() {
-         $panes.children()
-             .eq(0)
-             .addClass('active')
-             .siblings()
-             .removeClass('active')
-     }
-     init()
- }
+  init () {
+    this.$panes.children()
+      .eq(0)
+      .addClass('active')
+      .siblings()
+      .removeClass('active')
+  }
+}
