@@ -1,0 +1,24 @@
+{
+  "name": "catch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/generator": "^7.8.8",
+    "@babel/node": "^7.8.7",
+    "@babel/parser": "^7.8.8",
+    "@babel/traverse": "^7.8.6",
+    "@babel/types": "^7.8.7",
+    "@types/babylon": "^6.16.5",
+    "@types/node": "^13.9.1",
+    "babel-preset-env": "^1.7.0",
+    "babylon": "^6.18.0",
+    "typescript": "^3.8.3"
+  }
+}
