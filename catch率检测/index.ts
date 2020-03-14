@@ -1,61 +1,80 @@
 const fs = require('fs')
-
-const code = fs.readFileSync('./test.ts').toString()
-
-const ast = require("@babel/parser").parse(code, {
-  // parse in strict mode and allow module declarations
-  sourceType: "module",
-
-  plugins: [
-    // enable jsx and flow syntax
-    "jsx",
-    "flow",
-    "classProperties"
-  ]
-});
-
 const traverse = require("@babel/traverse").default;
 
-let n = 0
-let m = 0
-traverse(ast, {
-  // enter(path) {
-  //   if (path.isIdentifier({ name: "n" })) {
-  //     path.node.name = "x";
-  //   }
+var methodNumber = 0
+var catchNumber = 0
 
-  //   if (path.isClassMethod) {
-  //     console.log(111)
-  //   }
-  //   // console.log(path)
-  // }
 
-  ClassMethod: function (path) {
-    n++
-    let tryStatement = path.node.body.body.find((item) => {
-      return item.type === 'TryStatement'
-    })
-    if (tryStatement) {
-      m++
+async function print(path) {
+  const dir = await fs.promises.opendir(path);
+  for await (const dirent of dir) {
+    let newPath = path + '/' + dirent.name
+    if (dirent.isDirectory()) {
+      print(newPath)
+    } else {
+      let code = getCode(newPath)
+      let ast = parseCode(code)
+      traverseAst(ast)
     }
+  }
+}
 
+const getCode = (path) => {
+  return fs.readFileSync(path).toString()
+}
 
-  },
-  ClassProperty: function (path) {
+const parseCode = (code) => {
+  return require("@babel/parser").parse(code, {
+    // parse in strict mode and allow module declarations
+    sourceType: "module",
+    plugins: [
+      "jsx",
+      "flow",
+      "classProperties"
+    ]
+  });
+}
 
-    if (path.node.value.type === 'ArrowFunctionExpression') {
-      n++
-      let tryStatement = path.node.value.body.body.find((item) => {
+const traverseAst = (ast) => {
+  traverse(ast, {
+    ClassMethod: function (path) {
+      addMethodNumber()
+      let tryStatement = path.node.body.body.find((item) => {
         return item.type === 'TryStatement'
       })
       if (tryStatement) {
-        m++
+        addCatchNumber()
+      }
+    },
+    ClassProperty: function (path) {
+      if (path.node.value.type === 'ArrowFunctionExpression') {
+        addMethodNumber()
+        let tryStatement = path.node.value.body.body.find((item) => {
+          return item.type === 'TryStatement'
+        })
+        if (tryStatement) {
+          addCatchNumber()
+        }
       }
     }
-  }
-});
+  });
+}
 
-console.log('--------')
-console.log("n:" + n)
-console.log("m:" + m)
-console.log('--------')
+let addMethodNumber = () => {
+  methodNumber++
+}
+
+let addCatchNumber = () => {
+  catchNumber++
+}
+
+print('./test').then(() => {
+  console.log('--------')
+  console.log("methodNumber:" + methodNumber)
+  console.log("catchNumber:" + catchNumber)
+  console.log("catchNumber/methodNumber:" + catchNumber / methodNumber)
+  console.log('--------')
+})
+
+
+
